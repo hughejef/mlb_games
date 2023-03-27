@@ -1,5 +1,6 @@
 import statsapi
 import datetime
+from datetime import timedelta
 
 
 # date stuff
@@ -26,10 +27,18 @@ class DodgerGame:
         return self.__home_or_away
 
 def check_games():
-    game_sched = statsapi.schedule(start_date=str(datetime.date.today()), team=119)
-    print(game_sched[0:4])
+    game_sched = statsapi.schedule(start_date=str(datetime.date.today()), end_date=str(datetime.date.today()+timedelta(days=7)), team=119)
+    for game in game_sched:
+        DodgerGame(game['game_id'],game['game_date'],game['game_datetime'],game['away_name'])
+
+
 
 check_games()
+
+print(DodgerGame)
+
+
+
 
 
 
