@@ -13,6 +13,7 @@ def check_game(day):
         print("Next Game on: ", game_sched[0]['game_date'])
 
 check_game(today)
+
 print(game_sched[0])
 
 #get today
