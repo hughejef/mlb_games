@@ -5,14 +5,13 @@ from datetime import timedelta
 
 # date stuff
 
-
 class DodgerGame:
     """A Dodger Game object"""
-    def __init__(self, game_id, game_day, game_time, home_or_away):
-        self.__game_id = game_id
-        self.__game_day = game_day
-        self.__game_time = game_time
-        self.__home_or_away = home_or_away
+    def __init__(self, game_id, game_day, game_time, home_team):
+        self.__game_id = int(game_id)
+        self.__game_day = str(game_day)
+        self.__game_time = str(game_time)
+        self.__home_team = str(home_team)
 
     def get_game_id(self):
         return self.__game_id
@@ -24,21 +23,29 @@ class DodgerGame:
         return self.__game_time
 
     def get_home_or_away(self):
-        return self.__home_or_away
+        if self.__home_team == 'Los Angeles Dodgers':
+            return 'Home'
+        else:
+            return 'Away'
+
+game_dict = {}
+game_list = []
 
 def check_games():
     game_sched = statsapi.schedule(start_date=str(datetime.date.today()), end_date=str(datetime.date.today()+timedelta(days=7)), team=119)
-    for game in game_sched:
-        DodgerGame(game['game_id'],game['game_date'],game['game_datetime'],game['away_name'])
+    time_object = str(datetime.datetime.strptime(game_sched[1]['game_datetime'].replace('T',' ').replace('Z',''), '%Y-%m-%d %H:%M:%S')+timedelta(hours=-7))
+    time = datetime.datetime.strptime(time_object.split(' ')[1], '%H:%M:%S').time()
+
+    current_game = {'game_id': game_sched[0]['game_id'], 'game_day':game_sched[0]['game_date'], 'game_time': str(time)}
+    next_game = {'game_id': game_sched[1]['game_id'], 'game_day':game_sched[1]['game_date'], 'game_time': str(time), 'home_team':game_sched[1]['home_name'], 'away_team':game_sched[1]['away_name']}
+
+
+    print(next_game)
+
 
 
 
 check_games()
-
-print(DodgerGame)
-
-
-
 
 
 
